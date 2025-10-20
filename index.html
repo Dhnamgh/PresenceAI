@@ -1,1 +1,43 @@
-PresenceAI
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Ứng dụng AI điểm danh SV</title>
+  <meta name="robots" content="noindex, follow">
+  <style>
+    html, body { height:100%; margin:0; }
+    header{
+      padding:10px 14px; background:#1e90ff; color:#fff; font-weight:600;
+      box-shadow:0 2px 6px rgba(0,0,0,.25)
+    }
+    .frame{ position:relative; height:calc(100% - 48px); background:#fff; }
+    iframe{
+      position:absolute; inset:0; width:100%; height:100%; border:0; background:#fff;
+    }
+    /* 🔒 Overlay Fullscreen */
+    .blocker{
+      position:absolute; right:0; bottom:0;
+      width:100px; height:100px;  /* desktop */
+      pointer-events:auto; background:transparent;
+    }
+    /* Mobile tự giảm kích thước blocker */
+    @media (max-width:600px){
+      .blocker{ width:72px; height:72px; }
+    }
+  </style>
+</head>
+<body>
+  <header>Ứng dụng AI điểm danh SV</header>
+  <div class="frame">
+    <iframe
+      src="https://qrlecturer.streamlit.app//?embed=true&embed_options=show_toolbar=false"
+      allow="clipboard-read; clipboard-write"
+      referrerpolicy="no-referrer"
+    ></iframe>
+
+    <!-- Overlay Fullscreen -->
+    <div class="blocker" aria-hidden="true"></div>
+  </div>
+</body>
+</html>PresenceAI
