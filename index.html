@@ -3,100 +3,66 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>PresenceAI • Điểm danh</title>
+  <title>Ứng dụng AI điểm danh SV</title>
+  <meta name="robots" content="noindex, follow">
   <style>
-    /* Reset nhỏ cho trang bọc */
-    html,body{height:100%;margin:0}
-    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#f6f7f9}
-
-    .wrap {
-      position: relative;
-      width: 100%;
-      height: 100vh;
-      overflow: hidden;
-      background:#0000;
+    html, body { height:100%; margin:0; }
+    header{
+      padding:10px 14px; background:#1e90ff; color:#fff; font-weight:600;
+      box-shadow:0 2px 6px rgba(0,0,0,.25)
     }
-
-    iframe#app {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      border: 0;
-      background: #fff;
+    .frame{ position:relative; height:calc(100% - 48px); background:#fff; }
+    iframe#app{
+      position:absolute; inset:0; width:100%; height:100%; border:0; background:#fff;
     }
-
-    /* ====== OVERLAY  ======
-      
-    */
-    .blocker-br {
-      position: fixed;     /* cố định theo viewport ngoài */
-      right: 0;
-      bottom: 0;
-      width: 220px;        /* desktop */
-      height: 220px;       /* desktop */
-      z-index: 9999;       /* cao hơn iframe */
-      pointer-events: auto;
-      background: rgba(255,255,255,0); /* trong suốt, KHÔNG ẩn nút */
+    /* Khu vực phủ trong suốt ở góc phải phía dưới */
+    .overlay{
+      position:absolute; right:0; bottom:0;
+      width:100px; height:100px;
+      pointer-events:auto; background:transparent; z-index:9999;
     }
-
-    /* Màn hình nhỏ: tăng vùng chặn vì UI scale to */
-    @media (max-width: 768px){
-      .blocker-br{ width: 280px; height: 280px; }
-    }
-    @media (max-width: 420px){
-      .blocker-br{ width: 320px; height: 320px; }
-    }
-
-    /* Tuỳ chọn: chặn thêm dải rất hẹp sát đáy (nếu app có status bar)
-       .blocker-bottom { position: fixed; left:0; right:0; bottom:0; height: 48px; z-index: 9998; background: transparent; }
-    */
-
-    /* Chặn context menu / long press  */
-    body, .wrap, iframe#app, .blocker-br {
-      -webkit-touch-callout: none;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
-      user-select: none;
-    }
+    @media (max-width:600px){ .overlay{ width:72px; height:72px; } }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <iframe id="app" allow="clipboard-read; clipboard-write" referrerpolicy="no-referrer"></iframe>
+  <header>Ứng dụng AI điểm danh SV</header>
+  <div class="frame">
+    <iframe
+      id="app"
+      allow="clipboard-read; clipboard-write"
+      referrerpolicy="no-referrer"
+    ></iframe>
 
-    <!-- Overlay chặn tương tác với các nút ở góc dưới-phải-->
-    <div class="blocker-br" aria-hidden="true" title="Khu vực bị vô hiệu hoá"></div>
-    <!-- Nếu cần: <div class="blocker-bottom"></div> -->
+    <!-- Lớp phủ trong suốt -->
+    <div class="overlay" aria-hidden="true"></div>
   </div>
 
   <script>
-    // 1) Lấy params từ QR
-    const params = new URLSearchParams(location.search);
-    const sv   = params.get("sv")   || "1";
-    const lop  = params.get("lop")  || "";
-    const buoi = params.get("buoi") || "Buổi 1";
+    // Lấy thông tin từ mã QR
+    const q = new URLSearchParams(location.search);
+    const sv   = q.get("sv");
+    const lop  = q.get("lop") || "";
+    const buoi = q.get("buoi") || "";
 
-    // 2) Base URL của app Streamlit
-    const STREAMLIT_URL = "https://qrlecturer.streamlit.app";
+    // Địa chỉ ứng dụng chính
+    const STREAMLIT_URL = "https://qrlecturer.streamlit.app/";
 
-    // 3) Build URL đích vào chế độ SV-only
-    const out = new URL(STREAMLIT_URL);
-    out.searchParams.set("embed", "true");   // Streamlit ẩn header mặc định khi embed (nút vẫn có thể hiển thị ở dưới phải)
-    out.searchParams.set("sv", "1");
-    if (lop)  out.searchParams.set("lop", lop);
-    if (buoi) out.searchParams.set("buoi", buoi);
+    // Tạo đường dẫn hiển thị trong iframe
+    const url = new URL(STREAMLIT_URL);
+    url.searchParams.set("embed", "true");
+    url.searchParams.set("embed_options", "show_toolbar=false");
 
-    // 4) Gán vào iframe
-    document.getElementById("app").src = out.toString();
+    if (sv === "1") url.searchParams.set("sv", "1");
+    if (lop)  url.searchParams.set("lop", lop);
+    if (buoi) url.searchParams.set("buoi", buoi);
 
-    // 5) Khoá thêm vài thao tác phá bọc 
+    // Hiển thị trong iframe
+    document.getElementById("app").src = url.toString();
+
+    // Một số thao tác phím và menu được tắt để hiển thị gọn gàng hơn
     window.addEventListener("contextmenu", e => e.preventDefault());
     window.addEventListener("keydown", e => {
-      // chặn vài tổ hợp phổ biến: Ctrl/⌘+S,U,P,O,I,J,K,Shift+Ctrl+I...
       if ((e.ctrlKey || e.metaKey) && "SUPQOIJKP".includes(e.key.toUpperCase())) e.preventDefault();
-      // F12
       if (e.key === "F12") e.preventDefault();
     }, {capture:true});
   </script>
