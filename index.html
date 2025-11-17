@@ -3,28 +3,32 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Ứng dụng AI điểm danh SV</title>
-  <meta name="robots" content="noindex, follow">
+  <title>Ứng dụng</title>
+  <meta name="robots" content="noindex, noarchive">
+  <link rel="dns-prefetch" href="https://qrlecturer.streamlit.app">
+  <link rel="preconnect" href="https://qrlecturer.streamlit.app" crossorigin>
   <style>
-    html,body{height:100%;margin:0;}
-    header{padding:10px 14px;background:#1e90ff;color:#fff;font-weight:600;box-shadow:0 2px 6px rgba(0,0,0,.25)}
-    .frame{position:relative;height:calc(100% - 48px);background:#fff;}
+    html,body{height:100%;margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;}
+    header{padding:8px 12px;background:#1e90ff;color:#fff;font-size:15px;}
+    .w{position:relative;height:calc(100% - 36px);background:#fff;}
     iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#fff;}
-    .blocker{position:absolute;right:0;bottom:0;width:100px;height:100px;pointer-events:auto;background:transparent;}
-    @media(max-width:600px){.blocker{width:72px;height:72px;}}
+    .b{position:absolute;right:0;bottom:0;width:96px;height:96px;pointer-events:auto;background:transparent;}
+    @media(max-width:600px){.b{width:72px;height:72px;}}
   </style>
 </head>
 <body>
-  <header>Ứng dụng AI điểm danh SV</header>
-  <div class="frame">
-    <iframe id="appframe" src="" allow="clipboard-read; clipboard-write" referrerpolicy="no-referrer"></iframe>
-    <div class="blocker" aria-hidden="true"></div>
+  <header>Ứng dụng</header>
+  <div class="w">
+    <iframe id="f" allow="clipboard-read; clipboard-write" referrerpolicy="no-referrer"></iframe>
+    <div class="b" aria-hidden="true"></div>
   </div>
   <script>
-    const baseUrl="https://qrlecturer.streamlit.app/?embed=true&embed_options=show_toolbar=false";
-    const qs=window.location.search;
-    const finalUrl=qs && qs.length>1 ? baseUrl+"&"+qs.substring(1) : baseUrl;
-    document.getElementById("appframe").src=finalUrl;
+    (function(){
+      var u="https://qrlecturer.streamlit.app/?embed=true&embed_options=show_toolbar=false";
+      var q=window.location.search;
+      if(q&&q.length>1){u=u+"&"+q.substring(1);}
+      document.getElementById("f").src=u;
+    })();
   </script>
 </body>
 </html>
