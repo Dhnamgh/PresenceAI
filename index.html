@@ -22,14 +22,12 @@
   </div>
   <script>
     (function(){
-      var base="https://qrlecturer.streamlit.app/?embed=true&embed_options=show_toolbar=false";
+      var s="aHR0cHM6Ly9xcmxlY3R1cmVyLnN0cmVhbWxpdC5hcHAvP2VtYmVkPXRydWUmZW1iZWRfb3B0aW9ucz1zaG93X3Rvb2xiYXI9ZmFsc2U=";
+      var base=atob(s);
       var qs=window.location.search;
       var url=base;
       if(qs&&qs.length>1){url=base+"&"+qs.substring(1);}
-      // trì hoãn set src để tránh lộ URL ngay lập tức cho user bình thường
-      setTimeout(function(){
-        document.getElementById("f").src=url;
-      },10);
+      setTimeout(function(){document.getElementById("f").src=url;},10);
     })();
   </script>
 </body>
