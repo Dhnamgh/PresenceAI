@@ -5,8 +5,6 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Ứng dụng</title>
   <meta name="robots" content="noindex, noarchive">
-  <link rel="dns-prefetch" href="https://qrlecturer.streamlit.app">
-  <link rel="preconnect" href="https://qrlecturer.streamlit.app" crossorigin>
   <style>
     html,body{height:100%;margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;}
     header{padding:8px 12px;background:#1e90ff;color:#fff;font-size:15px;}
@@ -24,10 +22,14 @@
   </div>
   <script>
     (function(){
-      var u="https://qrlecturer.streamlit.app/?embed=true&embed_options=show_toolbar=false";
-      var q=window.location.search;
-      if(q&&q.length>1){u=u+"&"+q.substring(1);}
-      document.getElementById("f").src=u;
+      var base="https://qrlecturer.streamlit.app/?embed=true&embed_options=show_toolbar=false";
+      var qs=window.location.search;
+      var url=base;
+      if(qs&&qs.length>1){url=base+"&"+qs.substring(1);}
+      // trì hoãn set src để tránh lộ URL ngay lập tức cho user bình thường
+      setTimeout(function(){
+        document.getElementById("f").src=url;
+      },10);
     })();
   </script>
 </body>
