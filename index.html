@@ -6,65 +6,25 @@
   <title>Ứng dụng AI điểm danh SV</title>
   <meta name="robots" content="noindex, follow">
   <style>
-    html, body { height:100%; margin:0; }
-    header{
-      padding:10px 14px; background:#1e90ff; color:#fff; font-weight:600;
-      box-shadow:0 2px 6px rgba(0,0,0,.25)
-    }
-    .frame{ position:relative; height:calc(100% - 48px); background:#fff; }
-    iframe#app{
-      position:absolute; inset:0; width:100%; height:100%; border:0; background:#fff;
-    }
-    /* Khu vực phủ trong suốt ở góc phải phía dưới */
-    .overlay{
-      position:absolute; right:0; bottom:0;
-      width:100px; height:100px;
-      pointer-events:auto; background:transparent; z-index:9999;
-    }
-    @media (max-width:600px){ .overlay{ width:72px; height:72px; } }
+    html,body{height:100%;margin:0;}
+    header{padding:10px 14px;background:#1e90ff;color:#fff;font-weight:600;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+    .frame{position:relative;height:calc(100% - 48px);background:#fff;}
+    iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#fff;}
+    .blocker{position:absolute;right:0;bottom:0;width:100px;height:100px;pointer-events:auto;background:transparent;}
+    @media(max-width:600px){.blocker{width:72px;height:72px;}}
   </style>
 </head>
 <body>
   <header>Ứng dụng AI điểm danh SV</header>
   <div class="frame">
-    <iframe
-      id="app"
-      allow="clipboard-read; clipboard-write"
-      referrerpolicy="no-referrer"
-    ></iframe>
-
-    <!-- Lớp phủ trong suốt -->
-    <div class="overlay" aria-hidden="true"></div>
+    <iframe id="appframe" src="" allow="clipboard-read; clipboard-write" referrerpolicy="no-referrer"></iframe>
+    <div class="blocker" aria-hidden="true"></div>
   </div>
-
   <script>
-    // Lấy thông tin từ mã QR
-    const q = new URLSearchParams(location.search);
-    const sv   = q.get("sv");
-    const lop  = q.get("lop") || "";
-    const buoi = q.get("buoi") || "";
-
-    // Địa chỉ ứng dụng chính
-    const STREAMLIT_URL = "https://qrlecturer.streamlit.app/";
-
-    // Tạo đường dẫn hiển thị trong iframe
-    const url = new URL(STREAMLIT_URL);
-    url.searchParams.set("embed", "true");
-    url.searchParams.set("embed_options", "show_toolbar=false");
-
-    if (sv === "1") url.searchParams.set("sv", "1");
-    if (lop)  url.searchParams.set("lop", lop);
-    if (buoi) url.searchParams.set("buoi", buoi);
-
-    // Hiển thị trong iframe
-    document.getElementById("app").src = url.toString();
-
-    // Một số thao tác phím và menu được tắt để hiển thị gọn gàng hơn
-    window.addEventListener("contextmenu", e => e.preventDefault());
-    window.addEventListener("keydown", e => {
-      if ((e.ctrlKey || e.metaKey) && "SUPQOIJKP".includes(e.key.toUpperCase())) e.preventDefault();
-      if (e.key === "F12") e.preventDefault();
-    }, {capture:true});
+    const baseUrl="https://qrlecturer.streamlit.app/?embed=true&embed_options=show_toolbar=false";
+    const qs=window.location.search;
+    const finalUrl=qs && qs.length>1 ? baseUrl+"&"+qs.substring(1) : baseUrl;
+    document.getElementById("appframe").src=finalUrl;
   </script>
 </body>
 </html>
